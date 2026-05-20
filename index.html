@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Store - Trang Chủ</title>
+    <!-- CSS link -->
+    <link rel="stylesheet" href="styles.css"> <!-- Ghi chú: Kết nối file CSS để tùy chỉnh giao diện -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header (Phần đầu trang) -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Sports Store</h1> <!-- Ghi chú: Logo của cửa hàng -->
+            </div>
+            <ul class="menu">
+                <li><a href="#home">Trang Chủ</a></li>
+                <li><a href="#products">Sản Phẩm</a></li>
+                <li><a href="#about">Giới Thiệu</a></li>
+                <li><a href="#contact">Liên Hệ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Banner (Banner chính) -->
+    <section id="home" class="hero">
+        <h2>Trang phục thể thao chuyên nghiệp</h2> <!-- Ghi chú: Dòng khẩu hiệu -->
+        <p>Sắm ngay những bộ đồ thể thao hàng đầu cho mọi môn thể thao!</p>
+        <a href="#products" class="btn">Mua ngay</a> <!-- Ghi chú: Nút chuyển đến sản phẩm -->
+    </section>
+
+    <!-- Products (Danh mục sản phẩm) -->
+    <section id="products">
+        <h2>Sản Phẩm</h2>
+        <div class="product-container">
+            <!-- Sản phẩm 1 -->
+            <div class="product">
+                <img src="images/sport1.jpg" alt="Đồ thể thao 1"> <!-- Ghi chú: Ảnh sản phẩm -->
+                <h3>Áo thể thao cao cấp</h3>
+                <p>$50</p>
+                <button class="btn">Thêm vào giỏ</button>
+            </div>
+            <!-- Sản phẩm 2 -->
+            <div class="product">
+                <img src="images/sport2.jpg" alt="Đồ thể thao 2">
+                <h3>Quần chạy bộ</h3>
+                <p>$40</p>
+                <button class="btn">Thêm vào giỏ</button>
+            </div>
+            <!-- Sản phẩm 3 -->
+            <div class="product">
+                <img src="images/sport3.jpg" alt="Đồ thể thao 3">
+                <h3>Giày thể thao</h3>
+                <p>$100</p>
+                <button class="btn">Thêm vào giỏ</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us (Phần giới thiệu) -->
+    <section id="about">
+        <h2>Về Chúng Tôi</h2>
+        <p>Cửa hàng chúng tôi luôn đem lại những sản phẩm thể thao tốt nhất từ những thương hiệu hàng đầu thế giới.</p>
+    </section>
+
+    <!-- Contact Us (Liên hệ) -->
+    <section id="contact">
+        <h2>Liên Hệ</h2>
+        <form>
+            <input type="text" placeholder="Tên của bạn" required> <!-- Ghi chú: Trường nhập tên -->
+            <input type="email" placeholder="Email của bạn" required> <!-- Ghi chú: Trường nhập email -->
+            <textarea placeholder="Tin nhắn của bạn" rows="5" required></textarea> <!-- Ghi chú: Trường nhập tin nhắn -->
+            <button type="submit" class="btn">Gửi</button>
+        </form>
+    </section>
+
+    <!-- Footer (Chân trang) -->
+    <footer>
+        <p>&copy; 2026 Sports Store. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://facebook.com" target="_blank">Facebook</a> |
+            <a href="https://instagram.com" target="_blank">Instagram</a> |
+            <a href="https://youtube.com" target="_blank">YouTube</a>
+        </div>
+    </footer>
+</body>
+</html>
