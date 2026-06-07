@@ -1,514 +1,444 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Store | Thời Trang Sang Trọng & Đẳng Cấp</title>
-    <meta name="description" content="Website bán hàng cao cấp, phong cách tối giản, sang trọng.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <title>LUXE VINTAGE | Thời Trang Thượng Lưu</title>
+    <meta name="description" content="Trải nghiệm mua sắm đẳng cấp với phong cách tối giản, sang trọng.">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#0B0B0B',       /* Đen chủ đạo */
-                        wine: '#6A1B29',       /* Đỏ rượu vang */
-                        gold: '#D4AF37',       /* Vàng đồng */
-                        luxuryGray: '#1F1F1F'  /* Xám đen phụ */
-                    },
-                    fontFamily {
-                        serif: ['Playfair Display', 'serif'],
-                        sans: ['Montserrat', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #0B0B0B; color: #F5F5F5; }
-        .font-luxury { font-family: 'Playfair Display', serif; }
-        /* Hiệu ứng loading */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0B0B0B; z-index: 9999; display: flex;
-            justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-    <div id="loader">
-        <div class="text-center">
-            <h2 class="font-luxury text-3xl text-gold tracking-widest animate-pulse">LUXURY STORE</h2>
-            <div class="w-16 h-[2px] bg-wine mx-auto mt-2 animate-bounce"></div>
-        </div>
+    <div class="loader-wrapper" id="loader">
+        <div class="luxury-spinner"></div>
     </div>
 
-    <header class="sticky top-0 z-50 bg-dark/95 border-b border-gold/20 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <button id="menu-btn" class="text-gold text-2xl lg:hidden focus:outline-none" aria-label="Menu">
+    <div class="notification-toast" id="notification">
+        <p id="notification-msg">Sản phẩm đã được thêm vào giỏ hàng!</p>
+    </div>
+
+    <header class="main-header">
+        <div class="header-container">
+            <button class="hamburger-btn" id="menu-open-btn">
                 <i class="fa-solid fa-bars"></i>
             </button>
 
-            <a href="#" class="font-luxury text-2xl sm:text-3xl text-gold tracking-widest font-bold">
-                L U X E <span class="text-wine">.</span>
-            </a>
+            <div class="logo">
+                <a href="#" onclick="switchPage('home')">LUXE<span>VINTAGE</span></a>
+            </div>
 
-            <nav class="hidden lg:flex space-x-8 text-sm uppercase tracking-widest font-medium">
-                <a href="#home" class="text-gold hover:text-white transition">Trang chủ</a>
-                <a href="#products" class="hover:text-gold transition">Sản phẩm</a>
-                <a href="#about" class="hover:text-gold transition">Giới thiệu</a>
-                <a href="#blog" class="hover:text-gold transition">Tin tức</a>
-                <a href="#contact" class="hover:text-gold transition">Liên hệ</a>
+            <nav class="desktop-nav">
+                <a href="#" class="nav-link active" onclick="switchPage('home')">Trang Chủ</a>
+                <a href="#" class="nav-link" onclick="switchPage('products')">Sản Phẩm</a>
+                <a href="#" class="nav-link" onclick="switchPage('about')">Giới Thiệu</a>
+                <a href="#" class="nav-link" onclick="switchPage('contact')">Liên Hệ</a>
             </nav>
 
-            <div class="flex items-center space-x-6 text-gold text-lg">
-                <button onclick="toggleSearch()" class="hover:text-wine transition"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button onclick="toggleModal('account-modal')" class="hover:text-wine transition"><i class="fa-solid fa-user"></i></button>
-                <button onclick="toggleModal('cart-modal')" class="relative hover:text-wine transition">
+            <div class="header-actions">
+                <button class="action-btn" onclick="switchPage('search-page')"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="action-btn" onclick="switchPage('account')"><i class="fa-solid fa-user"></i></button>
+                <button class="action-btn cart-icon-btn" onclick="switchPage('cart')">
                     <i class="fa-solid fa-bag-shopping"></i>
-                    <span class="absolute -top-2 -right-2 bg-wine text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">2</span>
+                    <span class="cart-count" id="cart-count-badge">0</span>
                 </button>
+                <button class="action-btn" id="dark-mode-toggle"><i class="fa-solid fa-moon"></i></button>
+                <button class="admin-quick-btn" onclick="switchPage('admin')"><i class="fa-solid fa-user-gear"></i></button>
             </div>
         </div>
     </header>
 
-    <div id="mobile-menu" class="fixed inset-0 bg-dark/98 z-50 transform -translate-x-full transition-transform duration-300 lg:hidden p-6 flex flex-col justify-between">
-        <div>
-            <div class="flex justify-between items-center border-b border-gold/20 pb-4">
-                <span class="font-luxury text-xl text-gold tracking-widest">DANH MỤC</span>
-                <button id="close-menu" class="text-gold text-2xl"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <nav class="mt-8 flex flex-col space-y-6 text-lg tracking-wide">
-                <a href="#" class="text-gold"><i class="fa-solid fa-house mr-3 text-sm"></i>Trang chủ</a>
-                <a href="#products" class="hover:text-gold"><i class="fa-solid fa-gem mr-3 text-sm"></i>Sản phẩm</a>
-                <a href="#about" class="hover:text-gold"><i class="fa-solid fa-address-card mr-3 text-sm"></i>Giới thiệu</a>
-                <a href="#blog" class="hover:text-gold"><i class="fa-solid fa-newspaper mr-3 text-sm"></i>Tin tức</a>
-                <a href="#contact" class="hover:text-gold"><i class="fa-solid fa-phone mr-3 text-sm"></i>Liên hệ</a>
-                <a href="#" onclick="toggleModal('cart-modal')" class="hover:text-gold"><i class="fa-solid fa-basket-shopping mr-3 text-sm"></i>Giỏ hàng</a>
-                <a href="#" onclick="toggleModal('account-modal')" class="hover:text-gold"><i class="fa-solid fa-user-lock mr-3 text-sm"></i>Đăng nhập / Đăng ký</a>
-                <a href="#policies" class="hover:text-gold"><i class="fa-solid fa-shield-halved mr-3 text-sm"></i>Chính sách</a>
-                <a href="#" class="hover:text-gold"><i class="fa-solid fa-truck-fast mr-3 text-sm"></i>Theo dõi đơn hàng</a>
-            </nav>
-        </div>
-        <div class="border-t border-gold/10 pt-4">
-            <div class="relative">
-                <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full bg-luxuryGray border border-gold/30 rounded py-2 px-4 text-sm text-white focus:outline-none focus:border-gold">
-                <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-gold/60"></i>
-            </div>
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <div class="mobile-menu-content">
+            <button class="close-menu-btn" id="menu-close-btn">&times;</button>
+            <div class="mobile-logo">LUXE VINTAGE</div>
+            <ul class="mobile-menu-links">
+                <li><a href="#" onclick="switchPage('home')"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                <li><a href="#" onclick="switchPage('products')"><i class="fa-solid fa-gavel"></i> Sản phẩm</a></li>
+                <li><a href="#" onclick="switchPage('about')"><i class="fa-solid fa-info-circle"></i> Giới thiệu</a></li>
+                <li><a href="#" onclick="switchPage('contact')"><i class="fa-solid fa-envelope"></i> Liên hệ</a></li>
+                <li><a href="#" onclick="switchPage('cart')"><i class="fa-solid fa-bag-shopping"></i> Giỏ hàng</a></li>
+                <li><a href="#" onclick="switchPage('account')"><i class="fa-solid fa-user"></i> Đăng nhập / Đăng ký</a></li>
+                <li><a href="#" onclick="switchPage('policies')"><i class="fa-solid fa-shield-heart"></i> Chính sách</a></li>
+                <li><a href="#" onclick="switchPage('account')"><i class="fa-solid fa-truck"></i> Theo dõi đơn hàng</a></li>
+            </ul>
         </div>
     </div>
 
-    <div id="search-bar" class="hidden bg-luxuryGray border-b border-gold/30 p-4 transition-all duration-300">
-        <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-4">
-            <input type="text" placeholder="Bạn đang tìm kiếm kiệt tác nào?..." class="flex-1 bg-dark border border-gold/40 p-3 text-white focus:outline-none">
-            <div class="flex gap-2 text-xs">
-                <select class="bg-dark border border-gold/20 p-2 text-gold"><option>Bộ lọc Giá</option><option>Dưới 5tr</option><option>Trên 5tr</option></select>
-                <select class="bg-dark border border-gold/20 p-2 text-gold"><option>Size</option><option>S</option><option>M</option><option>L</option></select>
-                <select class="bg-dark border border-gold/20 p-2 text-gold"><option>Màu sắc</option><option>Đen</option><option>Đỏ rượu</option></select>
+    <main id="main-content">
+        
+        <section id="page-home" class="page-section active-page">
+            <div class="hero-banner" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600&auto=format&fit=crop');">
+                <div class="hero-text animate-fade-in">
+                    <h3>KỶ NGUYÊN THỜI TRANG ĐẲNG CẤP</h3>
+                    <h1>ĐẬM CHẤT QUÝ TỘC</h1>
+                    <p class="slogan">"Sự sang trọng không nằm ở chỗ gây chú ý, mà nằm ở chỗ được ghi nhớ."</p>
+                    <button class="btn-luxury" onclick="switchPage('products')">KHÁM PHÁ NGAY</button>
+                </div>
             </div>
-            <button class="bg-wine hover:bg-red-900 text-white px-6 py-2 uppercase tracking-widest text-sm">Tìm</button>
-        </div>
-    </div>
 
-    <main id="home">
-        <section class="relative h-[85vh] bg-cover bg-center flex items-center justify-center" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80');">
-            <div class="text-center px-4">
-                <span class="text-gold uppercase tracking-widest text-xs sm:text-sm font-semibold block mb-3">Tôn vinh đẳng cấp thượng lưu</span>
-                <h1 class="font-luxury text-4xl sm:text-6xl lg:text-7xl text-white font-light tracking-wide mb-6">Độc Bản & <span class="text-gold italic">Sang Trọng</span></h1>
-                <p class="text-gray-400 max-w-xl mx-auto text-xs sm:text-sm font-light leading-relaxed mb-8">Khám phá bộ sưu tập giới hạn mang phong cách hoàng gia, sự kết hợp hoàn hảo giữa sắc đỏ quyến rũ và ánh vàng vương giả.</p>
-                <a href="#products" class="inline-block border border-gold text-gold hover:bg-gold hover:text-dark px-8 py-3 uppercase tracking-widest text-xs font-semibold transition duration-300">Khám Phá Ngay</a>
+            <div class="container section-padding">
+                <h2 class="section-title">DANH MỤC THƯỢNG LƯU</h2>
+                <div class="category-grid">
+                    <div class="cat-card" onclick="switchPage('products')">
+                        <img src="https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?q=80&w=500" alt="Đầm dạ hội" loading="lazy">
+                        <div class="cat-overlay"><h3>QUÝ CÔ Elegant</h3></div>
+                    </div>
+                    <div class="cat-card" onclick="switchPage('products')">
+                        <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=500" alt="Suits Nam" loading="lazy">
+                        <div class="cat-overlay"><h3>QUÝ ÔNG Gentleman</h3></div>
+                    </div>
+                    <div class="cat-card" onclick="switchPage('products')">
+                        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=500" alt="Phụ kiện" loading="lazy">
+                        <div class="cat-overlay"><h3>PHỤ KIỆN Luxury</h3></div>
+                    </div>
+                </div>
             </div>
-            <div class="absolute bottom-0 w-full bg-dark/80 backdrop-blur-sm border-t border-gold/10 hidden md:block">
-                <div class="max-w-7xl mx-auto grid grid-cols-4 text-center text-xs tracking-widest text-gold/80 py-4 uppercase">
-                    <a href="#" class="border-r border-gold/10 hover:text-white">Đồng hồ cao cấp</a>
-                    <a href="#" class="border-r border-gold/10 hover:text-white">Trang sức quý phái</a>
-                    <a href="#" class="border-r border-gold/10 hover:text-white">Túi xách da thật</a>
-                    <a href="#" class="hover:text-white">Nước hoa tinh tế</a>
+
+            <div class="container section-padding">
+                <h2 class="section-title">SẢN PHẨM KIỆT TÁC</h2>
+                <div class="product-grid" id="home-products-container">
+                    </div>
+            </div>
+
+            <div class="video-review-section">
+                <div class="container grid-2">
+                    <div class="video-box">
+                        <h3 class="gold-text">Chế Tác Thủ Công</h3>
+                        <p>Xem câu chuyện hậu trường phía sau những thiết kế Đỏ Rượu Vang quyền lực.</p>
+                        <div class="video-placeholder">
+                            <i class="fa-solid fa-circle-play"></i>
+                            <span>PLAY VIDEO CONCEPT</span>
+                        </div>
+                    </div>
+                    <div class="reviews-box">
+                        <h3 class="gold-text">Khách Hàng Nói Về Chúng Tôi</h3>
+                        <div class="review-carousel">
+                            <blockquote class="luxury-quote">
+                                "Bộ suit màu đỏ Bordeaux mua tại đây giúp tôi hoàn toàn nổi bật tại đêm tiệc thượng đỉnh. Chất vải và đường may cực kỳ tinh tế!"
+                                <cite>— Doanh nhân Nguyễn Minh Hùng</cite>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="policies-bar">
+                <div class="container b-grid-4">
+                    <div class="policy-item"><i class="fa-solid fa-truck-fast"></i> <span>Giao hàng Hỏa Tốc miễn phí</span></div>
+                    <div class="policy-item"><i class="fa-solid fa-gem"></i> <span>Bảo hành trọn đời sản phẩm</span></div>
+                    <div class="policy-item"><i class="fa-solid fa-arrow-rotate-left"></i> <span>Đổi trả đặc quyền 7 ngày</span></div>
+                    <div class="policy-item"><i class="fa-solid fa-headset"></i> <span>Trợ lý mua sắm 24/7</span></div>
                 </div>
             </div>
         </section>
 
-        <section id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="text-center mb-16">
-                <h2 class="font-luxury text-3xl sm:text-4xl text-white tracking-wider">Sản Phẩm Nổi Bật</h2>
-                <div class="w-20 h-[1px] bg-gold mx-auto mt-3"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                <div class="bg-luxuryGray border border-gold/10 group flex flex-col justify-between">
-                    <div class="relative overflow-hidden bg-black aspect-square">
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Sản phẩm cao cấp" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
-                        <span class="absolute top-4 left-4 bg-wine text-white text-[10px] uppercase tracking-widest px-3 py-1 font-semibold">Bán chạy</span>
+        <section id="page-products" class="page-section">
+            <div class="container section-padding">
+                <div class="search-filter-wrapper">
+                    <div class="search-box-advanced">
+                        <input type="text" id="adv-search-input" placeholder="Tìm kiếm sản phẩm kiệt tác...">
+                        <button onclick="applyFilters()"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-luxury text-xl text-white mb-2">Đồng Hồ Royale Gold II</h3>
-                        <div class="flex items-center space-x-3 mb-4">
-                            <span class="text-gold font-medium text-lg">12.500.000đ</span>
-                            <span class="text-gray-500 line-through text-xs">15.000.000đ</span>
+                    <div class="filters-sidebar">
+                        <div class="filter-group">
+                            <label>Khoảng Giá:</label>
+                            <select id="filter-price">
+                                <option value="all">Tất cả giá</option>
+                                <option value="0-2000000">Dưới 2.000.000đ</option>
+                                <option value="2000000-5000000">2.000.000đ - 5.000.000đ</option>
+                                <option value="5000000-99999999">Trên 5.000.000đ</option>
+                            </select>
                         </div>
-                        
-                        <div class="flex justify-between items-center text-xs mb-4 border-t border-b border-gold/10 py-3">
-                            <div>
-                                <span class="text-gray-400 block mb-1">Màu sắc</span>
-                                <div class="flex gap-2">
-                                    <span class="w-4 h-4 rounded-full bg-gold inline-block cursor-pointer border border-white"></span>
-                                    <span class="w-4 h-4 rounded-full bg-wine inline-block cursor-pointer"></span>
-                                </div>
+                        <div class="filter-group">
+                            <label>Kích Cỡ:</label>
+                            <select id="filter-size">
+                                <option value="all">Tất cả size</option>
+                                <option value="S">Size S</option>
+                                <option value="M">Size M</option>
+                                <option value="L">Size L</option>
+                                <option value="XL">Size XL</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Màu sắc:</label>
+                            <select id="filter-color">
+                                <option value="all">Tất cả màu</option>
+                                <option value="Đỏ Rượu">Đỏ Rượu Vang</option>
+                                <option value="Đen Huyền">Đen Huyền Bí</option>
+                                <option value="Vàng Đồng">Vàng Hoàng Gia</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">BỘ SƯU TẬP HOÀNG GIA</h2>
+                <div class="product-grid" id="shop-products-container">
+                    </div>
+            </div>
+        </section>
+
+        <section id="page-product-detail" class="page-section">
+            <div class="container section-padding" id="product-detail-container">
+                </div>
+        </section>
+
+        <section id="page-cart" class="page-section">
+            <div class="container section-padding">
+                <h2 class="section-title">GIỎ HÀNG THƯỢNG LƯU</h2>
+                <div class="cart-layout">
+                    <div class="cart-items-list" id="cart-items-container">
+                        </div>
+                    <div class="cart-summary-box">
+                        <h3>TÓM TẮT ĐƠN HÀNG</h3>
+                        <hr class="gold-hr">
+                        <div class="summary-line"><span>Tạm tính:</span> <span id="cart-subtotal">0đ</span></div>
+                        <div class="summary-line"><span>Phí vận chuyển:</span> <span id="cart-shipping">Miễn phí</span></div>
+                        <div class="promo-section">
+                            <input type="text" id="coupon-code" placeholder="Nhập mã giảm giá (LUXE10)">
+                            <button class="btn-gold" onclick="applyCoupon()">ÁP DỤNG</button>
+                        </div>
+                        <div class="summary-line total-line"><span>TỔNG TIỀN:</span> <span id="cart-total" class="gold-text">0đ</span></div>
+                        <button class="btn-luxury w-100" onclick="switchPage('checkout')">TIẾN HÀNH THANH TOÁN</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-checkout" class="page-section">
+            <div class="container section-padding">
+                <h2 class="section-title">THỦ TỤC THANH TOÁN</h2>
+                <form id="checkout-form" onsubmit="processOrder(event)">
+                    <div class="grid-2">
+                        <div class="checkout-billing">
+                            <h3><i class="fa-solid fa-address-card gold-text"></i> THÔNG TIN KHÁCH HÀNG</h3>
+                            <div class="form-group"><input type="text" placeholder="Họ và tên *" required></div>
+                            <div class="form-group"><input type="tel" placeholder="Số điện thoại *" required></div>
+                            <div class="form-group"><input type="email" placeholder="Email nhận vận đơn *" required></div>
+                            <div class="form-group"><input type="text" placeholder="Địa chỉ giao hàng đầy đủ *" required></div>
+                            <div class="form-group">
+                                <select required>
+                                    <option value="">Chọn phương thức vận chuyển</option>
+                                    <option value="fast">Hỏa tốc nội thành (Miễn phí)</option>
+                                    <option value="standard">Chuyển phát tiêu chuẩn bảo mật (Miễn phí)</option>
+                                </select>
                             </div>
-                            <div>
-                                <span class="text-gray-400 block mb-1">Kích thước</span>
-                                <div class="flex gap-1 text-[10px]">
-                                    <span class="border border-gold/30 px-2 py-0.5 cursor-pointer hover:bg-gold hover:text-black">Standard</span>
-                                </div>
+                        </div>
+                        <div class="checkout-payment">
+                            <h3><i class="fa-solid fa-credit-card gold-text"></i> PHƯƠNG THỨC THANH TOÁN</h3>
+                            <div class="payment-options">
+                                <label class="pay-option">
+                                    <input type="radio" name="payment" value="cod" checked>
+                                    <span>Thanh toán khi nhận hàng (COD Luxury)</span>
+                                </label>
+                                <label class="pay-option">
+                                    <input type="radio" name="payment" value="bank">
+                                    <span>Chuyển khoản đặc quyền Quốc Tế / Nội Địa</span>
+                                </label>
+                            </div>
+                            <div class="order-final-box">
+                                <p>Bằng việc nhấn đặt hàng, bạn đã đồng ý với các điều khoản bảo mật thông tin cao cấp của Luxe Vintage.</p>
+                                <button type="submit" class="btn-luxury w-100">XÁC NHẬN ĐẶT HÀNG & THANH TOÁN</button>
                             </div>
                         </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="toggleModal('cart-modal')" class="bg-wine hover:bg-red-950 text-white text-xs uppercase tracking-widest py-3 font-semibold transition">Mua Ngay</button>
-                            <button onclick="alert('Đã thêm sản phẩm vào giỏ')" class="border border-gold text-gold hover:bg-gold hover:text-dark text-xs uppercase tracking-widest py-3 font-semibold transition">Thêm vào giỏ</button>
-                        </div>
                     </div>
-                </div>
-
-                <div class="bg-luxuryGray border border-gold/10 group flex flex-col justify-between">
-                    <div class="relative overflow-hidden bg-black aspect-square">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Sản phẩm mới" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 opacity-90">
-                        <span class="absolute top-4 left-4 bg-gold text-dark text-[10px] uppercase tracking-widest px-3 py-1 font-semibold">New In</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-luxury text-xl text-white mb-2">Giày Crimson Velvet Suede</h3>
-                        <div class="flex items-center space-x-3 mb-4">
-                            <span class="text-gold font-medium text-lg">4.800.000đ</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs mb-4 border-t border-b border-gold/10 py-3">
-                            <div><span class="text-gray-400 block mb-1">Màu sắc</span><div class="flex gap-2"><span class="w-4 h-4 rounded-full bg-wine inline-block"></span></div></div>
-                            <div><span class="text-gray-400 block mb-1">Size</span><div class="flex gap-1 text-[10px]"><span class="border border-gold/30 px-1">40</span><span class="border border-gold/30 px-1">41</span></div></div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="toggleModal('cart-modal')" class="bg-wine hover:bg-red-950 text-white text-xs uppercase tracking-widest py-3 font-semibold transition">Mua Ngay</button>
-                            <button onclick="alert('Đã thêm sản phẩm vào giỏ')" class="border border-gold text-gold hover:bg-gold hover:text-dark text-xs uppercase tracking-widest py-3 font-semibold transition">Thêm vào giỏ</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-luxuryGray border border-gold/10 group flex flex-col justify-between">
-                    <div class="relative overflow-hidden bg-black aspect-square">
-                        <img src="https://images.unsplash.com/photo-1581605405669-fcdf81165afa?auto=format&fit=crop&w=600&q=80" alt="Khuyến mãi" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 opacity-90">
-                        <span class="absolute top-4 left-4 bg-wine text-white text-[10px] uppercase tracking-widest px-3 py-1 font-semibold">-20%</span>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="font-luxury text-xl text-white mb-2">Ví Da Bifold Noir Gold</h3>
-                        <div class="flex items-center space-x-3 mb-4">
-                            <span class="text-gold font-medium text-lg">2.200.000đ</span>
-                            <span class="text-gray-500 line-through text-xs">2.750.000đ</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs mb-4 border-t border-b border-gold/10 py-3">
-                            <div><span class="text-gray-400 block mb-1">Màu sắc</span><div class="flex gap-2"><span class="w-4 h-4 rounded-full bg-black inline-block border border-gold/40"></span></div></div>
-                            <div><span class="text-gray-400 block mb-1">Size</span><div class="flex gap-1 text-[10px]"><span class="border border-gold/30 px-1">Standard</span></div></div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="toggleModal('cart-modal')" class="bg-wine hover:bg-red-950 text-white text-xs uppercase tracking-widest py-3 font-semibold transition">Mua Ngay</button>
-                            <button onclick="alert('Đã thêm sản phẩm vào giỏ')" class="border border-gold text-gold hover:bg-gold hover:text-dark text-xs uppercase tracking-widest py-3 font-semibold transition">Thêm vào giỏ</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="bg-luxuryGray border-y border-gold/10 py-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <span class="text-gold tracking-widest text-xs font-semibold uppercase block mb-2">Since 2018</span>
-                    <h2 class="font-luxury text-3xl sm:text-4xl text-white mb-6">Câu Chuyện Kiến Tạo Đẳng Cấp</h2>
-                    <p class="text-gray-400 font-light text-sm leading-relaxed mb-4">Chúng tôi tin rằng cái đẹp thực sự không nằm ở sự phô trương, mà nằm ở sự tinh tế tối giản. Mỗi sản phẩm tại cửa hàng đều được hoàn thiện thủ công bởi các nghệ nhân lành nghề nhất.</p>
-                    <blockquote class="border-l-2 border-gold pl-4 italic text-gold text-sm my-6">"Chất lượng trường tồn cùng thời gian - Khẳng định vị thế độc bản."</blockquote>
-                    <p class="text-gray-400 font-light text-sm leading-relaxed">Cam kết đem đến trải nghiệm dịch vụ chuẩn 5 sao cùng chính sách bảo hành trọn đời đối với mọi dòng sản phẩm cao cấp.</p>
-                </div>
-                <div class="relative group cursor-pointer aspect-video bg-black border border-gold/20">
-                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Video Giới Thiệu" class="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-16 h-16 rounded-full border border-gold flex items-center justify-center text-gold text-xl group-hover:scale-110 transition bg-dark/50">
-                            <i class="fa-solid fa-play ml-1"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="text-center mb-12">
-                <h2 class="font-luxury text-2xl tracking-wider text-gold">Khách Hàng Nói Về Chúng Tôi</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-luxuryGray p-6 border-t-2 border-wine">
-                    <div class="flex text-gold text-xs gap-1 mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-xs text-gray-400 italic font-light">"Chất lượng sản phẩm vượt ngoài mong đợi, đóng gói hộp gỗ lót nhung đỏ cực kỳ sang trọng. Sẽ tiếp tục ủng hộ shop."</p>
-                    <span class="block mt-4 text-xs font-semibold text-white tracking-widest uppercase">— Doanh nhân Nguyễn Hùng</span>
-                </div>
-                <div class="bg-luxuryGray p-6 border-t-2 border-gold">
-                    <div class="flex text-gold text-xs gap-1 mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-xs text-gray-400 italic font-light">"Dịch vụ chăm sóc khách hàng đỉnh cao. Tôi được hỗ trợ đổi size tận nhà rất nhanh chóng và chuyên nghiệp."</p>
-                    <span class="block mt-4 text-xs font-semibold text-white tracking-widest uppercase">— CEO Minh Tuyết</span>
-                </div>
-                <div class="bg-luxuryGray p-6 border-t-2 border-wine">
-                    <div class="flex text-gold text-xs gap-1 mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-xs text-gray-400 italic font-light">"Thiết kế tinh tế, phối màu đen vàng rất thời thượng và dễ phối đồ. Đáng đồng tiền bát gạo."</p>
-                    <span class="block mt-4 text-xs font-semibold text-white tracking-widest uppercase">— Kiến trúc sư Hoàng Lâm</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="policies" class="bg-dark border-t border-gold/10 py-12 text-xs text-gray-400">
-            <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div class="p-4"><i class="fa-solid fa-truck text-gold text-xl mb-2"></i><h4 class="text-white font-medium mb-1">Giao Hàng Hỏa Tốc</h4><p class="text-[11px] font-light">Miễn phí toàn quốc đơn từ 2tr</p></div>
-                <div class="p-4"><i class="fa-solid fa-rotate text-gold text-xl mb-2"></i><h4 class="text-white font-medium mb-1">Đổi Trả 7 Ngày</h4><p class="text-[11px] font-light">Thủ tục nhanh chóng, tận nhà</p></div>
-                <div class="p-4"><i class="fa-solid fa-gem text-gold text-xl mb-2"></i><h4 class="text-white font-medium mb-1">Bảo Hành 2 Năm</h4><p class="text-[11px] font-light">Cam kết chính hãng 100%</p></div>
-                <div class="p-4"><i class="fa-solid fa-headset text-gold text-xl mb-2"></i><h4 class="text-white font-medium mb-1">Hỗ Trợ 24/7</h4><p class="text-[11px] font-light">Hotline Thượng lưu riêng biệt</p></div>
-            </div>
-        </section>
-
-        <section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-gold/10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div>
-                    <h2 class="font-luxury text-3xl text-white mb-6">Kết Nối Với Chúng Tôi</h2>
-                    <p class="text-gray-400 text-sm font-light mb-8">Xin vui lòng để lại thông tin, đội ngũ tư vấn cá nhân sẽ liên hệ với quý khách trong vòng 15 phút.</p>
-                    <div class="space-y-4 text-sm font-light">
-                        <p class="flex items-center"><i class="fa-solid fa-phone text-gold mr-4 w-5"></i> Hotline: 1900 LUXURY (024.7777)</p>
-                        <p class="flex items-center"><i class="fa-solid fa-envelope text-gold mr-4 w-5"></i> Email: vip@luxury-store.vn</p>
-                        <p class="flex items-center"><i class="fa-solid fa-location-dot text-gold mr-4 w-5"></i> Địa chỉ: Số 88 Tràng Tiền, Hoàn Kiếm, Hà Nội</p>
-                    </div>
-                    <div class="mt-6 w-full h-40 bg-luxuryGray border border-gold/20 rounded flex items-center justify-center text-xs text-gray-500">
-                        <i class="fa-solid fa-map-location-dot text-gold text-lg mr-2"></i> Bản Đồ Vị Trí Cửa Hàng (Google Map API Tích Hợp)
-                    </div>
-                </div>
-                <form onsubmit="event.preventDefault(); alert('Thông tin yêu cầu đã gửi thành công!')" class="bg-luxuryGray p-8 border border-gold/20 flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <input type="text" placeholder="Họ và tên của quý khách" required class="w-full bg-dark border border-gold/20 p-3 text-sm focus:outline-none focus:border-gold text-white">
-                        <input type="email" placeholder="Địa chỉ Email" required class="w-full bg-dark border border-gold/20 p-3 text-sm focus:outline-none focus:border-gold text-white">
-                        <textarea placeholder="Ý kiến đóng góp hoặc yêu cầu tư vấn sản phẩm riêng biệt..." rows="4" class="w-full bg-dark border border-gold/20 p-3 text-sm focus:outline-none focus:border-gold text-white"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-wine hover:bg-red-950 text-white font-medium text-xs uppercase tracking-widest py-4 mt-4 transition">Gửi Lời Nhắn</button>
                 </form>
             </div>
         </section>
-    </main>
 
-    <div id="cart-modal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm justify-end">
-        <div class="w-full max-w-md bg-luxuryGray h-full p-6 flex flex-col justify-between overflow-y-auto">
-            <div>
-                <div class="flex justify-between items-center border-b border-gold/20 pb-4 mb-4">
-                    <h3 class="font-luxury text-xl text-gold tracking-widest">Túi Mua Hàng (02)</h3>
-                    <button onclick="toggleModal('cart-modal')" class="text-gold text-xl"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex gap-4 border-b border-gold/10 pb-4">
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=100&q=80" class="w-16 h-16 object-cover border border-gold/20">
-                        <div class="flex-1 text-xs">
-                            <h4 class="text-white font-medium">Đồng Hồ Royale Gold II</h4>
-                            <p class="text-gold mt-1">12.500.000đ</p>
-                            <div class="flex items-center gap-2 mt-2">
-                                <button class="bg-dark px-2 border border-gold/20 text-white">-</button>
-                                <span>1</span>
-                                <button class="bg-dark px-2 border border-gold/20 text-white">+</button>
-                            </div>
+        <section id="page-account" class="page-section">
+            <div class="container section-padding">
+                <div class="account-grid" id="account-box">
+                    <div class="login-register-form">
+                        <div class="tabs-auth">
+                            <button class="auth-tab-btn active" onclick="toggleAuthTab('login')">ĐĂNG NHẬP</button>
+                            <button class="auth-tab-btn" onclick="toggleAuthTab('register')">ĐĂNG KÝ THÀNH VIÊN</button>
+                        </div>
+                        <div id="auth-login-view" class="auth-view active">
+                            <form onsubmit="handleLogin(event)">
+                                <div class="form-group"><input type="email" placeholder="Email của bạn" required></div>
+                                <div class="form-group"><input type="password" placeholder="Mật khẩu" required></div>
+                                <p class="forgot-pass-txt"><a href="#" onclick="alert('Hệ thống đã gửi link đặt lại mật khẩu về Email của bạn!')">Quên mật khẩu?</a></p>
+                                <button type="submit" class="btn-luxury w-100">ĐĂNG NHẬP HOÀNG GIA</button>
+                            </form>
+                        </div>
+                        <div id="auth-register-view" class="auth-view">
+                            <form onsubmit="alert('Đăng ký tài khoản thành công! Hãy đăng nhập.')">
+                                <div class="form-group"><input type="text" placeholder="Họ tên của bạn" required></div>
+                                <div class="form-group"><input type="email" placeholder="Email" required></div>
+                                <div class="form-group"><input type="password" placeholder="Mật khẩu bảo mật" required></div>
+                                <button type="submit" class="btn-luxury w-100">ĐĂNG KÝ THÀNH VIÊN LUXE</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 flex gap-2">
-                    <input type="text" placeholder="Mã giảm giá" class="bg-dark border border-gold/20 p-2 text-xs flex-1 text-white focus:outline-none">
-                    <button class="bg-gold text-dark font-bold text-[11px] px-3 uppercase">Áp dụng</button>
+            </div>
+        </section>
+
+        <section id="page-about" class="page-section">
+            <div class="container section-padding">
+                <h2 class="section-title">CÂU CHUYỆN THƯƠNG HIỆU</h2>
+                <div class="grid-2 align-center">
+                    <div>
+                        <p class="gold-text text-uppercase">Kiến tạo đẳng cấp từ 2018</p>
+                        <p><strong>Luxe Vintage</strong> ra đời từ niềm đam mê tột cùng với những đường cắt may cổ điển tinh tế kết hợp nét quyền lực của vương triều phương Tây. Chúng tôi tôn sùng ba gam màu mang tính biểu tượng: Sắc đen huyền bí trường tồn, sắc Đỏ rượu vang nồng nàn quyền lực và màu Vàng đồng vương giả quý tộc.</p>
+                        <p>Mỗi tác phẩm thời trang tại xưởng may của Luxe Vintage trải qua hơn 48 giờ chế tác thủ công tỉ mỉ từ những nghệ nhân tâm huyết bậc nhất.</p>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=600" alt="Xưởng may" class="img-fluid border-gold" loading="lazy">
+                    </div>
                 </div>
             </div>
-            
-            <div class="border-t border-gold/20 pt-4 mt-6">
-                <div class="text-xs space-y-2 mb-4 text-gray-400">
-                    <div class="flex justify-between"><span>Tạm tính:</span><span class="text-white">12.500.000đ</span></div>
-                    <div class="flex justify-between"><span>Phí vận chuyển:</span><span class="text-emerald-500">Miễn phí</span></div>
-                    <div class="flex justify-between text-sm font-semibold text-gold border-t border-gold/10 pt-2"><span>Tổng tiền:</span><span>12.500.000đ</span></div>
+        </section>
+
+        <section id="page-contact" class="page-section">
+            <div class="container section-padding">
+                <h2 class="section-title">KẾT NỐI VỚI CHÚNG TÔI</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>ĐẠI LỘ THỜI TRANG LUXE VINTAGE</h3>
+                        <p><i class="fa-solid fa-location-dot gold-text"></i> 128 Lầu 5, Tòa Nhà Vincom Đồng Khởi, Quận 1, TP. Hồ Chí Minh</p>
+                        <p><i class="fa-solid fa-phone gold-text"></i> Hotline Thượng Lưu: 1900 8888 LUXE</p>
+                        <p><i class="fa-solid fa-envelope gold-text"></i> Email: vip@luxevintage.com</p>
+                        <div class="social-channels">
+                            <a href="#"><i class="fa-brands fa-facebook"></i> Facebook Messenger</a> | 
+                            <a href="#"><i class="fa-solid fa-comment-sms"></i> Zalo VIP</a>
+                        </div>
+                        <div class="map-placeholder mt-3">
+                            <iframe src="https://www.google.com/maps/embed?pb=!11m12!1m3!1d3919.4602288924116!2d106.7018029!3d10.7760193!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1svi!2s!4v1700000000000" width="100%" height="250" style="border:1px solid var(--gold-color); filter: invert(90%);" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>GỬI YÊU CẦU CHO TRỢ LÝ MUA SẮM</h3>
+                        <form onsubmit="alert('Cảm ơn quý khách! Trợ lý thời trang sẽ liên hệ lại trong vòng 15 phút.'); event.preventDefault();">
+                            <div class="form-group"><input type="text" placeholder="Danh xưng / Họ tên quý khách" required></div>
+                            <div class="form-group"><input type="email" placeholder="Địa chỉ Email" required></div>
+                            <div class="form-group"><textarea rows="5" placeholder="Quý khách đang quan tâm đến dòng sản phẩm hay kích cỡ nào? Chúng tôi luôn lắng nghe..." required></textarea></div>
+                            <button type="submit" class="btn-luxury">GỬI THÔNG ĐIỆP</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="bg-dark p-3 text-xs border border-gold/20 mb-4 space-y-2">
-                    <span class="text-gold uppercase tracking-wider block font-medium">Thông Tin Giao Hàng</span>
-                    <input type="text" placeholder="Họ tên & SĐT nhận hàng" class="w-full bg-luxuryGray border border-gold/10 p-2 text-white">
-                    <input type="text" placeholder="Địa chỉ nhận hàng toàn quốc" class="w-full bg-luxuryGray border border-gold/10 p-2 text-white">
-                    <select class="w-full bg-luxuryGray border border-gold/10 p-2 text-gray-400"><option>Chọn Phương thức thanh toán</option><option>Chuyển khoản Ngân hàng (Ưu đãi 2%)</option><option>Thanh toán khi nhận hàng (COD)</option></select>
-                </div>
-                <button onclick="alert('Cảm ơn Quý khách. Đơn hàng của quý khách đã được hệ thống ghi nhận thành công!')" class="w-full bg-wine hover:bg-red-950 text-white text-xs uppercase tracking-widest py-3 font-semibold text-center block transition">Xác Nhận Đặt Hàng</button>
             </div>
+        </section>
+
+        <section id="page-policies" class="page-section">
+            <div class="container section-padding">
+                <h2 class="section-title">ĐẶC QUYỀN & CHÍNH SÁCH</h2>
+                <div class="policy-tabs-container">
+                    <h3>1. Chính sách Vận Chuyển Hỏa Tốc</h3>
+                    <p>Mọi đơn hàng tại Luxe Vintage đều được bảo mật đóng hộp gỗ phủ nhung và giao hỏa tốc miễn phí trên toàn quốc.</p>
+                    <h3>2. Chính sách Đổi Trả Đặc Quyền</h3>
+                    <p>Khách hàng được quyền yêu cầu đổi size hoặc hoàn mẫu trong vòng 7 ngày kể từ ngày nhận hàng tận nơi mà không tốn bất kỳ chi phí nào.</p>
+                    <h3>3. Chính sách Bảo Hành Trọn Đời</h3>
+                    <p>Hỗ trợ bảo dưỡng đính kết lại đá, cúc áo, xử lý phom dáng váy, suit trọn đời hoàn toàn miễn phí tại tất cả các store.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-admin" class="page-section">
+            <div class="container section-padding">
+                <div class="admin-dashboard-layout">
+                    <div class="admin-sidebar">
+                        <h3>LUXE PANEL</h3>
+                        <p class="gold-text">Chế độ: Tổng Quản Trị</p>
+                        <hr class="gold-hr">
+                        <ul class="admin-nav-links">
+                            <li class="active"><i class="fa-solid fa-chart-line"></i> Quản lý Doanh Thu</li>
+                            <li><i class="fa-solid fa-box"></i> Quản lý Sản Phẩm</li>
+                            <li><i class="fa-solid fa-receipt"></i> Quản lý Đơn Hàng</li>
+                        </ul>
+                    </div>
+                    <div class="admin-main-panel">
+                        <h2>BẢNG ĐIỀU KHIỂN DOANH THU & HỆ THỐNG</h2>
+                        <div class="admin-stats-grid">
+                            <div class="stat-card"><h5>Doanh Thu Tháng</h5><p class="gold-text">1,240,500,000đ</p></div>
+                            <div class="stat-card"><h5>Đơn Hàng Mới</h5><p class="gold-text">48 Đơn hàng</p></div>
+                            <div class="stat-card"><h5>Sản Phẩm Trong Kho</h5><p class="gold-text">1,150 Items</p></div>
+                        </div>
+                        <div class="admin-action-area mt-4">
+                            <h3>Thêm sản phẩm mới vào hệ thống</h3>
+                            <form id="admin-add-product-form" onsubmit="adminAddProduct(event)">
+                                <div class="grid-2">
+                                    <input type="text" id="admin-p-name" placeholder="Tên sản phẩm thượng lưu" required>
+                                    <input type="number" id="admin-p-price" placeholder="Giá bán công bố (VNĐ)" required>
+                                    <input type="text" id="admin-p-img" placeholder="URL Hình ảnh sản phẩm (Unsplash/Imgur link)" required>
+                                    <select id="admin-p-color">
+                                        <option value="Đỏ Rượu">Đỏ Rượu Vang</option>
+                                        <option value="Đen Huyền">Đen Huyền Bí</option>
+                                        <option value="Vàng Đồng">Vàng Hoàng Gia</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-gold mt-2">KÍCH HOẠT ĐĂNG SẢN PHẨM</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-search-page" class="page-section">
+            <div class="container section-padding text-center">
+                <h2 class="section-title">TÌM KIẾM NHANH KIỆT TÁC</h2>
+                <input type="text" id="quick-search-input" oninput="executeQuickSearch()" placeholder="Nhập từ khóa (Ví dụ: Đỏ, Đen, Suit, Váy...)" style="width:80%; max-width:500px; padding:15px; background:#111; color:#fff; border:1px solid var(--gold-color); font-family:inherit;">
+                <div class="product-grid mt-4" id="quick-search-results"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="live-chat-widget" id="chat-widget">
+        <div class="chat-header" onclick="toggleChatWindow()">
+            <span><i class="fa-solid fa-comment-dots"></i> Trợ lý Tư Vấn VIP</span>
+            <i class="fa-solid fa-chevron-up" id="chat-icon-dir"></i>
+        </div>
+        <div class="chat-body" id="chat-body">
+            <div class="chat-msg system-msg">Chào mừng Quý khách đến với không gian Luxe Vintage. Tôi có thể hỗ trợ gì cho quý khách về size hay màu sắc ạ?</div>
+        </div>
+        <div class="chat-footer" id="chat-footer" style="display: none;">
+            <input type="text" id="chat-input" placeholder="Nhập lời nhắn...">
+            <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
-    <div id="account-modal" class="fixed inset-0 bg-black/80 z-50 hidden backdrop-blur-sm items-center justify-center p-4">
-        <div class="w-full max-w-md bg-luxuryGray border border-gold/30 p-6 relative">
-            <button onclick="toggleModal('account-modal')" class="absolute top-4 right-4 text-gold text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <div class="text-center mb-6">
-                <h3 class="font-luxury text-2xl text-gold tracking-widest">THÀNH VIÊN VIP</h3>
-                <p class="text-xs text-gray-400 mt-1">Đăng nhập để nhận đặc quyền thượng lưu và theo dõi đơn hàng</p>
-            </div>
-            <form onsubmit="event.preventDefault(); alert('Đăng nhập thành công tài khoản VIP!')" class="space-y-4 text-xs">
-                <div>
-                    <label class="block text-gray-400 mb-1">Email / Mã số VIP</label>
-                    <input type="email" required class="w-full bg-dark border border-gold/20 p-3 text-white focus:outline-none focus:border-gold">
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">LUXE VINTAGE</div>
+                <p>Thương hiệu thời trang cao cấp khẳng định uy quyền và phong thái quý tộc thượng lưu Đông Dương.</p>
+                <div class="footer-socials">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
                 </div>
-                <div>
-                    <label class="block text-gray-400 mb-1">Mật khẩu bảo mật</label>
-                    <input type="password" required class="w-full bg-dark border border-gold/20 p-3 text-white focus:outline-none focus:border-gold">
-                </div>
-                <div class="flex justify-between items-center text-[11px] text-gray-400">
-                    <label class="flex items-center"><input type="checkbox" class="mr-1 accent-wine"> Ghi nhớ tôi</label>
-                    <a href="#" class="hover:text-gold">Quên mật khẩu?</a>
-                </div>
-                <button type="submit" class="w-full bg-gold text-dark font-semibold uppercase tracking-widest py-3 hover:bg-yellow-600 transition">Đăng Nhập Hệ Thống</button>
-            </form>
-            <div class="text-center mt-6 pt-4 border-t border-gold/10 text-xs">
-                <p class="text-gray-400">Chưa có tài khoản quý tộc? <a href="#" class="text-wine font-semibold hover:underline">Đăng ký ngay</a></p>
             </div>
-        </div>
-    </div>
-
-    <footer class="bg-dark text-gray-400 text-xs border-t border-gold/20 pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            <div>
-                <span class="font-luxury text-2xl text-gold tracking-widest font-bold block mb-4">L U X E .</span>
-                <p class="font-light leading-relaxed mb-4">Hệ thống phân phối thời trang & phụ kiện cao cấp chính hãng. Biểu tượng của sự tinh tế, lịch lãm và thành đạt.</p>
-                <p class="text-white font-medium">Giờ mở cửa: <span class="text-gold">09:00 - 22:00</span> (Hàng ngày)</p>
-            </div>
-            <div>
-                <h4 class="text-gold uppercase tracking-widest font-medium mb-4 text-sm">Danh Mục Nhanh</h4>
-                <ul class="space-y-2 font-light">
-                    <li><a href="#" class="hover:text-gold transition">Sản phẩm độc quyền</a></li>
-                    <li><a href="#" class="hover:text-gold transition">Bộ sưu tập Thu - Đông</a></li>
-                    <li><a href="#" class="hover:text-gold transition">Quà tặng Doanh nghiệp</a></li>
-                    <li><a href="#" class="hover:text-gold transition">Ấn phẩm giới hạn</a></li>
+            <div class="footer-col">
+                <h3>DANH MỤC NHANH</h3>
+                <ul>
+                    <li><a href="#" onclick="switchPage('products')">Váy Dạ Hội Đỏ Rượu</a></li>
+                    <li><a href="#" onclick="switchPage('products')">Suits Đen May Đo Tailor</a></li>
+                    <li><a href="#" onclick="switchPage('products')">Trang Sức Vàng Đồng Khảm Đá</a></li>
                 </ul>
             </div>
-            <div>
-                <h4 class="text-gold uppercase tracking-widest font-medium mb-4 text-sm">Chính Sách Khách Hàng</h4>
-                <ul class="space-y-2 font-light">
-                    <li><a href="#policies" class="hover:text-gold transition">Chính sách vận chuyển bảo mật</a></li>
-                    <li><a href="#policies" class="hover:text-gold transition">Chính sách đổi trả tối giản</a></li>
-                    <li><a href="#policies" class="hover:text-gold transition">Điều khoản sử dụng dịch vụ</a></li>
-                    <li><a href="#policies" class="hover:text-gold transition">Bảo mật thông tin thượng lưu</a></li>
+            <div class="footer-col">
+                <h3>HỖ TRỢ KHÁCH HÀNG</h3>
+                <ul>
+                    <li><a href="#" onclick="switchPage('policies')">Chính sách vận chuyển bảo mật</a></li>
+                    <li><a href="#" onclick="switchPage('policies')">Đặc quyền đổi trả hoàn tiền</a></li>
+                    <li><a href="#" onclick="switchPage('policies')">Bảo hành trọn đời</a></li>
                 </ul>
             </div>
-            <div>
-                <h4 class="text-gold uppercase tracking-widest font-medium mb-4 text-sm">Kênh Truyền Thông</h4>
-                <div class="flex space-x-4 text-lg text-gold mb-4">
-                    <a href="#" class="hover:text-white"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#" class="hover:text-white"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="hover:text-white"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="hover:text-white"><i class="fa-brands fa-tiktok"></i></a>
-                </div>
-                <p class="font-light mb-2">Đăng ký nhận đặc quyền ưu đãi sớm:</p>
-                <div class="flex"><input type="email" placeholder="Email của bạn..." class="bg-luxuryGray border border-gold/30 p-2 text-white text-xs w-full focus:outline-none"><button class="bg-wine px-3 text-white"><i class="fa-solid fa-paper-plane"></i></button></div>
+            <div class="footer-col">
+                <h3>BẢO MẬT HỆ THỐNG</h3>
+                <p><i class="fa-solid fa-shield-halved gold-text"></i> Kết nối mã hóa SSL 256-bit chuẩn PCI-DSS.</p>
+                <p><i class="fa-solid fa-bolt gold-text"></i> Tối ưu hóa CDN tăng tốc độ phản hồi < 0.5s.</p>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-gold/10 mt-12 pt-6 text-center text-[11px] text-gray-500 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>&copy; 2026 LUXE Store. All Rights Reserved. Designed for Luxury Experience.</p>
-            <div class="flex gap-4 text-gold/60"><i class="fa-brands fa-cc-visa text-lg"></i><i class="fa-brands fa-cc-mastercard text-lg"></i><i class="fa-solid fa-shield-halved text-lg"></i> SSL Secured</div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 LUXE VINTAGE INC. All Rights Reserved. Crafted for Royals.</p>
         </div>
     </footer>
 
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col space-y-3 items-end">
-        <div id="pop-notif" class="bg-luxuryGray border border-gold/40 p-3 rounded text-xs text-white max-w-xs shadow-2xl flex items-center gap-3 transition-all duration-500 opacity-0 transform translate-y-2">
-            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></div>
-            <p><span class="text-gold font-medium">Anh Trần Minh (Hà Nội)</span> vừa đặt mua một chiếc Royale Gold II cách đây 2 phút.</p>
-        </div>
-        <button onclick="alert('Đang kết nối tới chuyên viên tư vấn riêng của bạn...')" class="bg-wine hover:bg-red-950 text-white w-14 h-14 rounded-full flex items-center justify-center text-xl shadow-2xl border border-gold animate-bounce" title="Trợ lý cá nhân trực tuyến">
-            <i class="fa-solid fa-comment-dots"></i>
-        </button>
-    </div>
-
-    <div class="fixed bottom-6 left-6 z-50">
-        <button onclick="toggleModal('admin-modal')" class="bg-gold/20 hover:bg-gold text-gold hover:text-black border border-gold/40 text-[10px] uppercase tracking-widest px-3 py-2 font-bold backdrop-blur-md transition">
-            <i class="fa-solid fa-lock mr-1"></i> Admin Portal
-        </button>
-    </div>
-
-    <div id="admin-modal" class="fixed inset-0 bg-dark/95 z-50 hidden p-6 overflow-y-auto">
-        <div class="max-w-5xl mx-auto">
-            <div class="flex justify-between items-center border-b border-gold/30 pb-4 mb-6">
-                <h2 class="font-luxury text-2xl text-gold tracking-widest"><i class="fa-solid fa-chart-line mr-2"></i>HỆ THỐNG QUẢN TRỊ ADMIN</h2>
-                <button onclick="toggleModal('admin-modal')" class="bg-wine text-white px-4 py-1 text-xs uppercase tracking-widest">Thoát Admin</button>
-            </div>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 text-center">
-                <div class="bg-luxuryGray p-4 border border-gold/10"><span class="text-gray-400 text-xs block">Doanh Thu Tháng Này</span><span class="text-xl font-bold text-gold">1.450.000.000đ</span></div>
-                <div class="bg-luxuryGray p-4 border border-gold/10"><span class="text-gray-400 text-xs block">Đơn Hàng Mới</span><span class="text-xl font-bold text-white">48 Đơn</span></div>
-                <div class="bg-luxuryGray p-4 border border-gold/10"><span class="text-gray-400 text-xs block">Khách Hàng VIP mới</span><span class="text-xl font-bold text-gold">12 Thành viên</span></div>
-                <div class="bg-luxuryGray p-4 border border-gold/10"><span class="text-gray-400 text-xs block">Hàng Tồn Kho Cảnh Báo</span><span class="text-xl font-bold text-wine">2 Sản phẩm</span></div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-                <div class="bg-luxuryGray p-4 border border-gold/20">
-                    <h3 class="text-gold font-semibold uppercase tracking-wider mb-3 border-b border-gold/10 pb-2">📦 Quản Lý Sản Phẩm & Kho</h3>
-                    <ul class="space-y-2 text-gray-400"><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-plus mr-2 text-[10px]"></i> Thêm sản phẩm độc bản mới</li><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-pen mr-2 text-[10px]"></i> Cập nhật bảng size chart / Màu sắc</li><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-boxes-stacked mr-2 text-[10px]"></i> Kiểm kho tự động</li></ul>
-                </div>
-                <div class="bg-luxuryGray p-4 border border-gold/20">
-                    <h3 class="text-gold font-semibold uppercase tracking-wider mb-3 border-b border-gold/10 pb-2">🧾 Quản Lý Đơn Hàng & Vận Chuyển</h3>
-                    <ul class="space-y-2 text-gray-400"><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-spinner mr-2 text-[10px]"></i> Duyệt đơn hàng chờ thanh toán (5)</li><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-truck-ramp-box mr-2 text-[10px]"></i> Đang điều phối giao hàng đối tác</li></ul>
-                </div>
-                <div class="bg-luxuryGray p-4 border border-gold/20">
-                    <h3 class="text-gold font-semibold uppercase tracking-wider mb-3 border-b border-gold/10 pb-2">📰 Quản Lý Nội Dung & Banner</h3>
-                    <ul class="space-y-2 text-gray-400"><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-image mr-2 text-[10px]"></i> Thay đổi Banner màn hình trang chủ</li><li class="hover:text-white cursor-pointer"><i class="fa-solid fa-feather mr-2 text-[10px]"></i> Viết bài viết kiến thức thương hiệu / SEO</li></ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-        // 13. Tắt Màn Hình Chờ (Loading Animation) khi trang tải xong 
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            loader.style.opacity = '0';
-            setTimeout(() => loader.style.display = 'none', 500);
-        });
-
-        // 2. Điều khiển Hamburger Menu trên Mobile
-        const menuBtn = document.getElementById('menu-btn');
-        const closeMenu = document.getElementById('close-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => mobileMenu.classList.remove('-translate-x-full'));
-        closeMenu.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
-
-        // Đóng mobile menu khi click vào link bất kỳ
-        document.querySelectorAll('#mobile-menu nav a').forEach(link => {
-            link.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
-        });
-
-        // 11. Bật/Tắt Thanh tìm kiếm chuyên nghiệp
-        function toggleSearch() {
-            const searchBar = document.getElementById('search-bar');
-            searchBar.classList.toggle('hidden');
-        }
-
-        // Bật/Tắt Đóng mở các Modal (Giỏ hàng, Đăng nhập, Admin Dashboard)
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if(modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        }
-
-        // 13. Giả lập một thông báo Popup tự động mua hàng thành công để kích thích chuyển đổi (Notification Popup)
-        setTimeout(() => {
-            const notif = document.getElementById('pop-notif');
-            notif.classList.remove('opacity-0', 'translate-y-2');
-            // Tự động ẩn sau 6 giây
-            setTimeout(() => {
-                notif.classList.add('opacity-0', 'translate-y-2');
-            }, 6000);
-        }, 4000);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
